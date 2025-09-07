@@ -75,7 +75,7 @@ export class AmploPayService {
             if (error.message.includes('CORS') || error.message.includes('cors')) {
               throw new Error('Erro de CORS: Configure https://localhost:5173 nas origens permitidas no painel da Amplo Pay.');
             }
-            if (error.message.includes('fetch')) {
+            if (error.name === 'TypeError') {
               throw new Error('Erro de conexão: Não foi possível conectar com o servidor de pagamentos.');
             }
           }
