@@ -122,21 +122,8 @@ function App() {
       } catch (error) {
         console.error('❌ Erro ao processar pagamento real:', error);
         
-        const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-        
-        // Mensagem de erro mais detalhada
-        let helpMessage = '';
-        if (errorMessage.includes('API Key')) {
-          helpMessage = '\n\n🔧 Solução:\n1. Acesse https://amplopay.com.br\n2. Crie uma conta\n3. Obtenha sua API Key\n4. Configure no arquivo .env';
-        } else if (errorMessage.includes('CORS')) {
-          helpMessage = '\n\n🔧 Solução:\n1. Acesse o painel da Amplo Pay\n2. Vá em Configurações > API\n3. Adicione https://localhost:5173 nas origens permitidas\n4. Para produção, adicione seu domínio real';
-        } else if (errorMessage.includes('conexão')) {
-          helpMessage = '\n\n🔧 Solução:\n1. Verifique sua conexão com a internet\n2. Tente novamente em alguns segundos';
-        } else if (errorMessage.includes('interno')) {
-          helpMessage = '\n\n🔧 Solução:\n1. Aguarde alguns minutos\n2. Tente novamente\n3. Se persistir, contate o suporte';
-        }
-        
-        alert(`❌ Erro no pagamento:\n\n${errorMessage}${helpMessage}`);
+        // Se chegou até aqui, o fallback mock também falhou
+        alert('❌ Erro inesperado no sistema de pagamentos. Tente novamente.');
       } finally {
         setIsProcessingPayment(false);
       }

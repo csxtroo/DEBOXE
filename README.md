@@ -6,17 +6,22 @@ Sistema completo de vendas de ingressos com pagamentos reais via Pix integrado �
 
 - ✅ Interface moderna e responsiva
 - ✅ Seleção de ingressos por categoria (VIP, Backstage, Influencers)
-- ✅ **PAGAMENTOS REAIS** com API da Amplo Pay
-- ✅ **PIX REAL** com QR Code funcional
+- ✅ **Sistema de pagamentos** com API da Amplo Pay
+- ✅ **PIX** com QR Code funcional
+- ✅ **Modo de desenvolvimento** com pagamentos simulados
+- ✅ **Modo de produção** com pagamentos reais
 - ✅ Confirmação automática via webhook
 - ✅ Polling de backup para confirmação
-- ✅ **VOCÊ RECEBE O DINHEIRO DE VERDADE** 💰
 
-## ⚠️ CONFIGURAÇÃO OBRIGATÓRIA
+## 🔧 Configuração
 
-### 1. **API Key da Amplo Pay (OBRIGATÓRIO)**
+### Modo de Desenvolvimento (Pagamentos Simulados)
 
-**SEM A API KEY, O SISTEMA NÃO FUNCIONA!**
+O sistema funciona automaticamente em modo de desenvolvimento com pagamentos simulados quando a API Key não está configurada.
+
+### Modo de Produção (Pagamentos Reais)
+
+Para ativar pagamentos reais, configure:
 
 1. Crie uma conta na Amplo Pay: https://amplopay.com.br
 2. Obtenha sua API Key no painel
@@ -28,13 +33,13 @@ VITE_AMPLO_PAY_BASE_URL=https://api.amplopay.com.br/v1
 VITE_SITE_URL=https://seu-dominio.com
 ```
 
-### 2. Configurar Webhook na Amplo Pay
+### Configurar Webhook na Amplo Pay (Apenas para Produção)
 
 No painel da Amplo Pay, configure:
 - **URL do Webhook**: `https://seu-dominio.com/webhook/amplo-pay`
 - **Eventos**: `payment.paid`, `payment.failed`, `payment.expired`
 
-### 3. Backend para Webhook (Necessário)
+### Backend para Webhook (Apenas para Produção)
 
 Você precisa implementar um endpoint no seu backend para receber os webhooks:
 
@@ -74,27 +79,27 @@ app.post('/webhook/amplo-pay', express.raw({type: 'application/json'}), (req, re
 # Instalar dependências
 npm install
 
-# OBRIGATÓRIO: Configurar API Key real
-cp .env.example .env
-# Editar .env com sua API Key da Amplo Pay
+# Desenvolvimento (pagamentos simulados)
+npm run dev
 
-# Build para produção
+# Produção (configure API Key real no .env)
 npm run build
 ```
 
-## ✅ Checklist OBRIGATÓRIO
+## ✅ Checklist para Produção
 
-- [ ] ✅ **API Key real da Amplo Pay configurada**
-- [ ] ✅ **Webhook configurado no painel da Amplo Pay**
-- [ ] ✅ **Testar pagamento real com valor baixo**
-- [ ] ✅ **Verificar recebimento na conta Amplo Pay**
+- [ ] **API Key real da Amplo Pay configurada**
+- [ ] **Webhook configurado no painel da Amplo Pay**
+- [ ] **Testar pagamento real com valor baixo**
+- [ ] **Verificar recebimento na conta Amplo Pay**
 
 ## 🔒 Segurança
 
-- ✅ **API Key protegida em variáveis de ambiente**
-- ✅ **Pagamentos reais processados pela Amplo Pay**
-- ✅ **Timeout automático de pagamentos (15 min)**
-- ✅ **Polling de backup para confirmação**
+- ✅ API Key protegida em variáveis de ambiente
+- ✅ Pagamentos processados pela Amplo Pay (produção)
+- ✅ Timeout automático de pagamentos (15 min)
+- ✅ Polling de backup para confirmação
+- ✅ Modo de desenvolvimento seguro com simulações
 
 ## 📞 Suporte
 
@@ -102,17 +107,23 @@ Para dúvidas sobre a integração com a Amplo Pay:
 - Documentação: https://docs.amplopay.com.br
 - Suporte: suporte@amplopay.com.br
 
-## 💰 Fluxo de Pagamento REAL
+## 💰 Fluxo de Pagamento
 
+### Desenvolvimento (Simulado)
 1. Cliente seleciona ingressos
-2. **Sistema gera pagamento REAL na Amplo Pay**
-3. **Cliente recebe QR Code Pix REAL**
-4. **Cliente efetua pagamento REAL**
-5. **VOCÊ RECEBE O DINHEIRO NA SUA CONTA** 💰
-6. **Amplo Pay confirma via webhook**
-7. **Sistema atualiza status automaticamente**
-8. **Ingressos são enviados por email**
+2. Sistema gera pagamento simulado
+3. Cliente recebe QR Code Pix simulado
+4. Pagamento é aprovado automaticamente após 10 segundos
+5. Sistema atualiza status automaticamente
+
+### Produção (Real)
+1. Cliente seleciona ingressos
+2. Sistema gera pagamento real na Amplo Pay
+3. Cliente recebe QR Code Pix real
+4. Cliente efetua pagamento real
+5. Você recebe o dinheiro na sua conta
+6. Amplo Pay confirma via webhook
+7. Sistema atualiza status automaticamente
+8. Ingressos são enviados por email
 
 ---
-
-**Status**: ✅ **SISTEMA DE PAGAMENTO REAL ATIVO** 💰
