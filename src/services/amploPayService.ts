@@ -55,6 +55,8 @@ export class AmploPayService {
         const response = await fetch(url, {
           ...options,
           signal: controller.signal,
+          mode: 'cors',
+          credentials: 'omit',
         });
         
         clearTimeout(timeoutId);
@@ -68,6 +70,9 @@ export class AmploPayService {
           if (error instanceof Error) {
             if (error.name === 'AbortError') {
               throw new Error('Timeout: A conexão demorou muito para responder. Verifique sua internet.');
+            }
+            if (error.message.includes('CORS') || error.message.includes('cors')) {
+              throw new Error('Erro de CORS: Configure https://localhost:5173 nas origens permitidas no painel da Amplo Pay.');
             }
             if (error.message.includes('fetch')) {
               throw new Error('Erro de conexão: Não foi possível conectar com o servidor de pagamentos.');
@@ -104,6 +109,7 @@ export class AmploPayService {
         description: request.description,
         payment_method: 'pix',
         expires_in: 900, // 15 minutos
+        callback_url: `${window.location.origin}/webhook/amplo-pay`,
         ...(request.customerEmail && {
           customer: {
             email: request.customerEmail,
@@ -125,7 +131,6 @@ export class AmploPayService {
           'Authorization': `Bearer ${this.apiKey}`,
           'Accept': 'application/json',
           'User-Agent': 'DEBOXE-ECLIPSE/1.0',
-          'Origin': window.location.origin,
         },
         body: JSON.stringify(requestBody),
       });
@@ -155,6 +160,8 @@ export class AmploPayService {
           throw new Error('API Key inválida. Verifique sua configuração no arquivo .env');
         } else if (response.status === 403) {
           throw new Error('Acesso negado. Verifique as permissões da sua API Key');
+        } else if (response.status === 0) {
+          throw new Error('Erro de CORS: Configure https://localhost:5173 nas origens permitidas no painel da Amplo Pay');
         } else if (response.status >= 500) {
           throw new Error('Erro interno da Amplo Pay. Tente novamente em alguns minutos');
         } else {
